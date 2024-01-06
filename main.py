@@ -3,14 +3,14 @@ import csv
 from bs4 import BeautifulSoup
 
 # HTMLファイルを読み込む
-with open('main.html', 'r', encoding='utf-8') as file:
+with open('mock/ranking.html', 'r', encoding='utf-8') as file:
     contents = file.read()
 
 # BeautifulSoupオブジェクトを作成
 soup = BeautifulSoup(contents, 'html.parser')
 
 # CSVファイルを開く
-with open('pokemon_ranking.csv', 'w', newline='', encoding='utf-8') as csvfile:
+with open('data/ranking.csv', 'w', newline='', encoding='utf-8') as csvfile:
     csvwriter = csv.writer(csvfile)
     # CSVのヘッダーを書き込む
     csvwriter.writerow(['Rank', 'Pokemon Name', 'URL'])
