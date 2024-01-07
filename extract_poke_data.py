@@ -1,5 +1,6 @@
 import json
 
+import requests
 from bs4 import BeautifulSoup
 
 
@@ -66,11 +67,30 @@ def extract_disadvantage_pokemon(soup):
     return d_disad_pokeon
 
 
+def extract_pokemon_data(rank, pokemon_name, url):
+    # urlからポケモン情報の取得
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    # 取得した情報をパース
+    same_team = extract_same_team(soup)
+    dominant_pokemon = extract_dominant_pokemon(soup)
+    disadvantage_pokemon = extract_disadvantage_pokemon(soup)
+    return {
+        'rank': rank,
+        'pokemon': pokemon_name,
+        'same_team': same_team,
+        'dominant': dominant_pokemon,
+        'disadvantage': disadvantage_pokemon
+    }
+
+
+def store_pokemon_data(rank, pokemon_name, url):
+    d = extract_pokemon_data(rank, pokemon_name, url)
+    # dをjson形式でファイルに保存
+    with open(f'data/pokemon/{pokemon_name}.json', 'w', encoding='utf-8') as f:
+        json.dump(d, f, ensure_ascii=False, indent=4)
+
+
+
 if __name__ == '__main__':
-    # HTMLファイルを読み込む
-    with open('mock/pokemon.html', 'r', encoding='utf-8') as file:
-        contents = file.read()
-    # BeautifulSoupオブジェクトを作成
-    soup = BeautifulSoup(contents, 'html.parser')
-    d = extract_disadvantage_pokemon(soup)
-    print(d)
+    store_pokemon_data(1, 'ハバタクカミ', 'https://sv.pokedb.tokyo/pokemon/show/0987-00?season=14&rule=0')
