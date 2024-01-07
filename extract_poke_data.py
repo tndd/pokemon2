@@ -91,6 +91,7 @@ def fetch_pokemon_data(rank, pokemon_name, url):
     # dをjson形式でファイルに保存
     with open(f'data/pokemon/{pokemon_name}.json', 'w', encoding='utf-8') as f:
         json.dump(d, f, ensure_ascii=False, indent=4)
+    print(f'{pokemon_name}のデータを取得しました')
 
 
 def all_fetch_pokemon_data():
