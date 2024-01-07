@@ -1,5 +1,6 @@
 import csv
 import json
+from concurrent.futures import ProcessPoolExecutor
 
 import requests
 from bs4 import BeautifulSoup
@@ -92,6 +93,20 @@ def fetch_pokemon_data(rank, pokemon_name, url):
         json.dump(d, f, ensure_ascii=False, indent=4)
 
 
+def all_fetch_pokemon_data():
+    with open('data/ranking.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f)
+        # ヘッダーをスキップ
+        next(reader)
+        # ThreadPoolExecutorを使用して並列処理
+        with ProcessPoolExecutor(max_workers=16) as executor:
+            # 各行に対してfetch_pokemon_data関数を実行
+            futures = [executor.submit(fetch_pokemon_data, *row) for row in reader]
+            # 結果を待つ
+            for future in futures:
+                future.result()
+
+
 
 if __name__ == '__main__':
-    fetch_pokemon_data(1, 'ハバタクカミ', 'https://sv.pokedb.tokyo/pokemon/show/0987-00?season=14&rule=0')
+    all_fetch_pokemon_data()
