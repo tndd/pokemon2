@@ -30,7 +30,7 @@ def extract_dominant_pokemon(soup):
     # spanから最も近い親要素でクラスが'pokemon-trend-card'のdivを見つける
     div_pokemon_trend_card = dominant_pokemon.find_parent(class_="pokemon-trend-card")
     # 同じチーム数の順位と名前のペア
-    dominant_pokemon = {}
+    d_dominant_pokemon = {}
     # ペア情報の取得
     for tr in div_pokemon_trend_card.find_all('tr'):
         # 各行のセルを取得
@@ -41,12 +41,29 @@ def extract_dominant_pokemon(soup):
             # ポケモン名を取得
             pokemon_name = cells[1].find('a', class_="pokemon-name").get_text(strip=True)
             # 順位とポケモン名を辞書に追加
-            dominant_pokemon[rank] = pokemon_name
-    return dominant_pokemon
+            d_dominant_pokemon[rank] = pokemon_name
+    return d_dominant_pokemon
 
 
 def extract_disadvantage_pokemon(soup):
-    pass
+        # "同じチーム"というテキストを持つspanを見つける
+    disad_pokeon = soup.find('p', string="倒したポケモン")
+    # spanから最も近い親要素でクラスが'pokemon-trend-card'のdivを見つける
+    div_pokemon_trend_card = disad_pokeon.find_parent(class_="pokemon-trend-card")
+    # 同じチーム数の順位と名前のペア
+    disad_pokeon = {}
+    # ペア情報の取得
+    for tr in div_pokemon_trend_card.find_all('tr'):
+        # 各行のセルを取得
+        cells = tr.find_all('td')
+        if cells and len(cells) >= 2:
+            # 順位を取得
+            rank = cells[0].get_text(strip=True)
+            # ポケモン名を取得
+            pokemon_name = cells[1].find('a', class_="pokemon-name").get_text(strip=True)
+            # 順位とポケモン名を辞書に追加
+            disad_pokeon[rank] = pokemon_name
+    return disad_pokeon
 
 
 if __name__ == '__main__':
