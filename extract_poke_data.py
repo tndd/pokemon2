@@ -1,3 +1,4 @@
+import csv
 import json
 
 import requests
@@ -84,7 +85,7 @@ def extract_pokemon_data(rank, pokemon_name, url):
     }
 
 
-def store_pokemon_data(rank, pokemon_name, url):
+def fetch_pokemon_data(rank, pokemon_name, url):
     d = extract_pokemon_data(rank, pokemon_name, url)
     # dをjson形式でファイルに保存
     with open(f'data/pokemon/{pokemon_name}.json', 'w', encoding='utf-8') as f:
@@ -93,4 +94,4 @@ def store_pokemon_data(rank, pokemon_name, url):
 
 
 if __name__ == '__main__':
-    store_pokemon_data(1, 'ハバタクカミ', 'https://sv.pokedb.tokyo/pokemon/show/0987-00?season=14&rule=0')
+    fetch_pokemon_data(1, 'ハバタクカミ', 'https://sv.pokedb.tokyo/pokemon/show/0987-00?season=14&rule=0')
