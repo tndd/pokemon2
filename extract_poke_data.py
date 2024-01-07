@@ -47,11 +47,11 @@ def extract_dominant_pokemon(soup):
 
 def extract_disadvantage_pokemon(soup):
         # "同じチーム"というテキストを持つspanを見つける
-    disad_pokeon = soup.find('p', string="倒したポケモン")
+    disad_pokeon = soup.find('p', string="倒されたポケモン")
     # spanから最も近い親要素でクラスが'pokemon-trend-card'のdivを見つける
     div_pokemon_trend_card = disad_pokeon.find_parent(class_="pokemon-trend-card")
     # 同じチーム数の順位と名前のペア
-    disad_pokeon = {}
+    d_disad_pokeon = {}
     # ペア情報の取得
     for tr in div_pokemon_trend_card.find_all('tr'):
         # 各行のセルを取得
@@ -62,8 +62,8 @@ def extract_disadvantage_pokemon(soup):
             # ポケモン名を取得
             pokemon_name = cells[1].find('a', class_="pokemon-name").get_text(strip=True)
             # 順位とポケモン名を辞書に追加
-            disad_pokeon[rank] = pokemon_name
-    return disad_pokeon
+            d_disad_pokeon[rank] = pokemon_name
+    return d_disad_pokeon
 
 
 if __name__ == '__main__':
@@ -72,5 +72,5 @@ if __name__ == '__main__':
         contents = file.read()
     # BeautifulSoupオブジェクトを作成
     soup = BeautifulSoup(contents, 'html.parser')
-    d = extract_dominant_pokemon(soup)
+    d = extract_disadvantage_pokemon(soup)
     print(d)
